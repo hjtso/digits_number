@@ -9,6 +9,7 @@ import glob
 import time
 from matplotlib import pyplot as plt
 from scipy import stats
+import skimage.io
 from lcd_mrcnn import LCDMrcnn
 from num_mrcnn import NUMMrcnn
 
@@ -61,10 +62,10 @@ class Ocr:
         # plt.subplot(1, 1, 1), plt.title('original'), plt.imshow(image_test)
         # plt.show()
 
-    def ocr_num_determine(self):
+    def ocr_num_determine(self, cropped):
         """Determine whether there are 7-deg numbers, and get them.
         """
-        number_list = []
+        number_list = self.num_mask_rcnn.test_image(cropped)
         return number_list
 
     def ocr_run(self):
@@ -100,15 +101,22 @@ class Ocr:
             return json.dumps(result_all)
 
         # 2.数字を取得する
-        image_cut = cv2.imread(self.img)
-        cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
-                  self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
+        image_cut = skimage.io.imread(self.img)
+        cropped = image_cut[self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x'],
+                  self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y']]  # [x0:x1,y0:y1]
+        # image_cut = cv2.imread(self.img)
+        # cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
+        #           self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
+
         # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
         # cv2.imwrite("./test_result/cropped_{}.jpg".format(now), cropped)
 
-        # TODO; get the number from LCD
+        # TODO: Perspective Transform of LCD
+        # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+
+        # TODO: get the number from LCD
         a = time.time()
-        self.numbers = self.ocr_num_determine()
+        self.numbers = self.ocr_num_determine(cropped)
         b = time.time()
         print("● ● ● ● NUM判定 Time:.%s Seconds" % (b - a))
 
