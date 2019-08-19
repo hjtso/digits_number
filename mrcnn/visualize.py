@@ -166,9 +166,10 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     ax.imshow(masked_image.astype(np.uint8))
     if auto_show:
         # Add: save image
-        now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-        plt.savefig("/Users/machen/Desktop/digits_number/test_result/{}.png".format(now))
+        # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
+        # plt.savefig(os.path.join(os.path.abspath("./"), "test_result/{}.png".format(now)))
         # plt.show()
+        pass
 
 
 def display_differences(image,
