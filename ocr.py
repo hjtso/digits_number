@@ -101,15 +101,11 @@ class Ocr:
             return json.dumps(result_all)
 
         # 2.数字を取得する
-        image_cut = skimage.io.imread(self.img)
-        cropped = image_cut[self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x'],
-                  self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y']]  # [x0:x1,y0:y1]
-        # image_cut = cv2.imread(self.img)
-        # cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
-        #           self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
-
-        # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-        # cv2.imwrite("./test_result/cropped_{}.jpg".format(now), cropped)
+        image_cut = cv2.imread(self.img)
+        cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
+                  self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
+        now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
+        cv2.imwrite("./test_result/cropped_{}.jpg".format(now), cropped)
 
         # TODO: Perspective Transform of LCD
         # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
@@ -133,8 +129,9 @@ if __name__ == '__main__':
     lcd_mask_rcnn = LCDMrcnn()
     num_mask_rcnn = NUMMrcnn()
     
-    list_of_files = sorted(glob.glob('./test_images/*.jpg'))
+    list_of_files = sorted(glob.glob('./test_images/1.jpg'))
     for file in list_of_files:
         print("\nImage name:", file)
         ocr_img = Ocr(file, lcd_mask_rcnn, num_mask_rcnn)
         result = ocr_img.ocr_run()
+        print("result:", result)

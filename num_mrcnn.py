@@ -79,12 +79,10 @@ class NUMMrcnn:
         """
         # image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.3)
+        image = img
 
         # Run detection
-        a = time.time()
         results = self.model.detect([image], verbose=1)
-        b = time.time()
-        print("● ● ● ● ● Mask-RCNN detect Time:.%s Seconds" % (b - a))
 
         r = results[0]
 
