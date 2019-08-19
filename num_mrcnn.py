@@ -102,7 +102,7 @@ class NUMMrcnn:
 
 if __name__ == '__main__':
     # test
-    image = '/Users/huangjintao/Desktop/digits_number/test_images/1.jpg'
+    image = './test_images/1.jpg'
     mask_rcnn = NUMMrcnn()
     scores = mask_rcnn.test_image(image)
     print(scores[0])
