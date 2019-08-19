@@ -28,8 +28,7 @@ COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
 # The path of training images
 # DATASET_ROOT_PATH = "/home/ubuntu/hjt/Mask_RCNN/images/NUM/"
-ROOT_DIR = os.path.abspath("../")
-DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "images", "LCD")
+DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "images", "NUM/")
 
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
@@ -38,9 +37,6 @@ if not os.path.exists(COCO_MODEL_PATH):
 ############################################################
 #  Configurations
 ############################################################
-
-sess = tf.Session()
-summary_writer = tf.summary.FileWriter('./tensor_log', sess.graph_def)
 
 
 class NUMConfig(Config):
@@ -118,17 +114,17 @@ class NUMDataset(utils.Dataset):
         height, width: the size of the generated images.
         """
         # ● Add classes. We have only one class to add.
-        self.add_class("NUM", 1, "1")
-        self.add_class("NUM", 2, "2")
-        self.add_class("NUM", 3, "3")
-        self.add_class("NUM", 4, "4")
-        self.add_class("NUM", 5, "5")
-        self.add_class("NUM", 6, "6")
-        self.add_class("NUM", 7, "7")
-        self.add_class("NUM", 8, "8")
-        self.add_class("NUM", 9, "9")
-        self.add_class("NUM", 10, "0")
-        self.add_class("NUM", 11, ".")
+        self.add_class("NUM", 1, ".")
+        self.add_class("NUM", 2, "0")
+        self.add_class("NUM", 3, "1")
+        self.add_class("NUM", 4, "2")
+        self.add_class("NUM", 5, "3")
+        self.add_class("NUM", 6, "4")
+        self.add_class("NUM", 7, "5")
+        self.add_class("NUM", 8, "6")
+        self.add_class("NUM", 9, "7")
+        self.add_class("NUM", 10, "8")
+        self.add_class("NUM", 11, "9")
 
         # Add images
         # Generate random specifications of images (i.e. color and
@@ -136,6 +132,7 @@ class NUMDataset(utils.Dataset):
         # actual images. Images are generated on the fly in load_image().
         for i in range(count):
             # print(imglist[i])
+            # filestr = imglist[i].split(".")[0]
             filestr = imglist[i].split(".")[0]
             mask_path = DATASET_ROOT_PATH + filestr + "/label.png"
             yaml_path = DATASET_ROOT_PATH + filestr + "/info.yaml"

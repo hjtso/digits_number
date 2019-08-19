@@ -28,8 +28,7 @@ COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
 # The path of training images
 # DATASET_ROOT_PATH = "/Users/gsl/Desktop/Mask_RCNN-master/images/receipt/"
-ROOT_DIR = os.path.abspath("../")
-DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "images", "LCD")
+DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "images", "LCD/")
 
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
@@ -38,9 +37,6 @@ if not os.path.exists(COCO_MODEL_PATH):
 ############################################################
 #  Configurations
 ############################################################
-
-sess = tf.Session()
-summary_writer = tf.summary.FileWriter('./tensor_log', sess.graph_def)
 
 
 class LCDConfig(Config):
