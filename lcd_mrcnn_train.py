@@ -61,17 +61,26 @@ class LCDConfig(Config):
     IMAGE_MAX_DIM = 512
 
     # Use smaller anchors because our image and objects are small
-    RPN_ANCHOR_SCALES = (8*6, 16*6, 32*6, 64*6, 128*6)  # anchor side in pixels
+    # scale=1024//IMAGE_MAX_DIM
+    # RPN_ANCHOR_SCALES = (32//scale, 64//scale, 128//scale, 256//scale, 512//scale)  # anchor side in pixels
+    # RPN_ANCHOR_SCALES = (8*6, 16*6, 32*6, 64*6, 128*6)  # anchor side in pixels
+    RPN_ANCHOR_SCALES = (16, 32, 64, 128, 256)  # anchor side in pixels
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
-    TRAIN_ROIS_PER_IMAGE = 32
+    # scale = 1024 // IMAGE_MIN_DIM
+    # TRAIN_ROIS_PER_IMAGE = 200 // scale
+    TRAIN_ROIS_PER_IMAGE = 100
 
     # Use a small epoch since the data is simple
-    STEPS_PER_EPOCH = 60  # 50
+    # num_images = 100
+    # batch_size = GPU_COUNT * IMAGES_PER_GPU
+    # STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
+    STEPS_PER_EPOCH = 132
 
     # use small validation steps since the epoch is small
-    VALIDATION_STEPS = 10
+    # VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
+    VALIDATION_STEPS = 7
 
 
 # For show #
