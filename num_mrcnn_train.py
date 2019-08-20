@@ -79,7 +79,7 @@ class NUMConfig(Config):
 
     # RPN_TRAIN_ANCHORS_PER_IMAGE = 256 // scale_max
     #
-    # MINI_MASK_SHAPE = (56 // scale, 56 // scale_max)
+    # MINI_MASK_SHAPE = (56 // scale_max, 56 // scale_max)
     #
     # DETECTION_MAX_INSTANCES = 100 * scale_min * 2 // 3
 
