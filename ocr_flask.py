@@ -57,3 +57,4 @@ if __name__ == '__main__':
 
 # command eg.
 # curl http://0.0.0.0:10080/pic -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
+# curl http://3.113.141.74:10080/pic -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
