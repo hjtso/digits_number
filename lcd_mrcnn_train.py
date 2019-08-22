@@ -21,14 +21,14 @@ from mrcnn.model import log
 import tensorflow as tf
 
 # Directory to save logs and trained model
-MODEL_DIR = os.path.join(ROOT_DIR, "logs_")
+MODEL_DIR = os.path.join(ROOT_DIR, "model_train")
 
 # Local path to trained weights file
 COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
 # The path of training images
-# DATASET_ROOT_PATH = "/Users/gsl/Desktop/Mask_RCNN-master/images/receipt/"
-DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "images", "LCD/")
+# DATASET_ROOT_PATH = "/Users/gsl/Desktop/Mask_RCNN-master/train_images/"
+DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "train_images/")
 
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
@@ -59,29 +59,19 @@ class LCDConfig(Config):
     # the large side, and that determines the image shape.
     IMAGE_MIN_DIM = 512
     IMAGE_MAX_DIM = 512
-    scale_max = 1024 // IMAGE_MAX_DIM
-    scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
-    RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)  # anchor side in pixels
+    RPN_ANCHOR_SCALES = (8*6, 16*6, 32*6, 64*6, 128*6)  # anchor side in pixels
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
-    TRAIN_ROIS_PER_IMAGE = 200 // scale_min
+    TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    num_images = 100
-    batch_size = GPU_COUNT * IMAGES_PER_GPU
-    STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
+    STEPS_PER_EPOCH = 60  # 50
 
     # use small validation steps since the epoch is small
-    VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
-
-    # RPN_TRAIN_ANCHORS_PER_IMAGE = 256 // scale_max
-    #
-    # MINI_MASK_SHAPE = (56 // scale_max, 56 // scale_max)
-    #
-    # DETECTION_MAX_INSTANCES = 100 * scale_min * 2 // 3
+    VALIDATION_STEPS = 10
 
 
 # For show #

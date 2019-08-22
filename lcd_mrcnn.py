@@ -41,12 +41,9 @@ class LCDConfig(Config):
     # the large side, and that determines the image shape.
     IMAGE_MIN_DIM = 512
     IMAGE_MAX_DIM = 512
-    scale_max = 1024 // IMAGE_MAX_DIM
-    scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
-    # RPN_ANCHOR_SCALES = (16, 32, 64, 128, 256)  # anchor side in pixels
-    RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
+    RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
 
 
 class LCDMrcnn:

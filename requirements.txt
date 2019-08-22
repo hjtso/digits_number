@@ -1,18 +1,21 @@
-###### Requirements for emrcnn.py ######`
+###### Requirements for lcd_mrcnn_train.py & num_mrcnn_train.py ######
+h5py
+imgaug
+
+###### Requirements for lcd_mrcnn.py & num_mrcnn.py ######
 scikit-image
 tensorflow>=1.3.0
 keras>=2.0.8
 IPython[all]
 
-###### Requirements for ocr.py ######`
+###### Requirements for ocr.py ######
 numpy
-opencv-contrib-python
 opencv-contrib-python-headless
 imutils
 seaborn
 matplotlib
 scipy
 
-###### Requirements for ocr_flask.py ######`
+###### Requirements for ocr_flask.py ######
 Werkzeug
 Flask
