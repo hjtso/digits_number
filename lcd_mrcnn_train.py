@@ -59,19 +59,33 @@ class LCDConfig(Config):
     # the large side, and that determines the image shape.
     IMAGE_MIN_DIM = 512
     IMAGE_MAX_DIM = 512
+    # scale_max = 1024 // IMAGE_MAX_DIM
+    # scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
+    # RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
     RPN_ANCHOR_SCALES = (8*6, 16*6, 32*6, 64*6, 128*6)  # anchor side in pixels
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
+    # TRAIN_ROIS_PER_IMAGE = 200 // scale_min
     TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
+    # num_images = 100
+    # batch_size = GPU_COUNT * IMAGES_PER_GPU
+    # STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
     STEPS_PER_EPOCH = 60  # 50
 
     # use small validation steps since the epoch is small
+    # VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
     VALIDATION_STEPS = 10
+
+    # RPN_TRAIN_ANCHORS_PER_IMAGE = 256 // scale_max
+    #
+    # MINI_MASK_SHAPE = (56 // scale_max, 56 // scale_max)
+    #
+    # DETECTION_MAX_INSTANCES = 100 * scale_min * 2 // 3
 
 
 # For show #
@@ -220,18 +234,18 @@ if __name__ == '__main__':
     # Train the head branches
     # Passing layers="heads" freezes all layers except the head layers.
     # You can also pass a regular expression to select which layers to train by name pattern.
-    model.train(dataset_train, dataset_val,
-                learning_rate=config.LEARNING_RATE,
-                epochs=40,   # 30
-                layers='heads')
+    # model.train(dataset_train, dataset_val,
+    #             learning_rate=config.LEARNING_RATE,
+    #             epochs=60,
+    #             layers='heads')
 
     # Fine tune all layers
     # Passing layers="all" trains all layers.
     # You can also pass a regular expression to select which layers to train by name pattern.
-    # model.train(dataset_train, dataset_val,
-    #             learning_rate=config.LEARNING_RATE,
-    #             epochs=40,  # 30
-    #             layers='all')
+    model.train(dataset_train, dataset_val,
+                learning_rate=config.LEARNING_RATE,
+                epochs=100,
+                layers='all')
 
     train_end = time.time()
     print("***** The end time:", train_end)
