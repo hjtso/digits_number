@@ -281,3 +281,6 @@ if __name__ == '__main__':
     train_end = time.time()
     print("***** The end time:", train_end)
     print("***** The training Time:.%s Seconds" % (train_end - train_start))
+
+
+# nohup python num_mrcnn_train.py >> logs_nohup/num_log_x.log 2>&1 &
