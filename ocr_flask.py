@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from flask import Flask, request
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = ['png', 'jpg']
-UPLOAD_PATH = "pic"
+UPLOAD_PATH = "pics"
 CODE_FILE_NOTALLOWED = 402
 
 
@@ -17,7 +17,7 @@ def allowed_filename(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@app.route('/pic', methods=['POST'])
+@app.route('/pics', methods=['POST'])
 def ocr():
     submitted_file = request.files['file']
     file_name = submitted_file.filename
@@ -56,5 +56,5 @@ if __name__ == '__main__':
 
 
 # command eg.
-# curl http://0.0.0.0:10080/pic -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
-# curl http://3.113.141.74:10080/pic -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
+# curl http://0.0.0.0:10080/pics -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
+# curl http://3.113.141.74:10080/pics -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool

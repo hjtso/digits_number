@@ -28,7 +28,7 @@ COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
 # The path of training images
 # DATASET_ROOT_PATH = "/Users/gsl/Desktop/Mask_RCNN-master/train_images/"
-DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "train_images/")
+DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "_train_images/")
 
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
@@ -250,5 +250,8 @@ if __name__ == '__main__':
     train_end = time.time()
     print("***** The end time:", train_end)
     print("***** The training Time:.%s Seconds" % (train_end - train_start))
+    os.system("sudo shutdown")
 
-# nohup python lcd_mrcnn_train.py >> logs_nohup/lcd_log_x.log 2>&1 &
+# nohup python lcd_mrcnn_train.py >> _logs/lcd_log_x.log 2>&1 &
+# tensorboard -logdir=/home/ubuntu/hjt/digits_number/model_train/
+# ssh -f -N -L 55555:localhost:6006 mars

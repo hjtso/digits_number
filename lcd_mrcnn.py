@@ -4,6 +4,7 @@ import sys
 import skimage.io
 import skimage.transform
 import time
+import glob
 from mrcnn.config import Config
 import mrcnn.model as modellib
 from mrcnn import visualize
@@ -98,7 +99,17 @@ class LCDMrcnn:
 
 if __name__ == '__main__':
     # test
-    image = './test_images/1.jpg'
+    test_directory = os.path.join(ROOT_DIR, '_test_images')
+    result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = LCDMrcnn()
-    scores = mask_rcnn.test_image(image)
-    print(scores[0])
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, '*.jpg')))
+
+    test_start = time.time()
+    print("***** The start time:", test_start)
+    for file in list_of_files:
+        print("\nImage name:", file)
+        scores = mask_rcnn.test_image(file)
+        print("Scores:", scores[0])
+    test_end = time.time()
+    print("***** The end time:", test_end)
+    print("***** The testing Time for every image:.%s Seconds" % ((test_end - test_start)/len(list_of_files)))

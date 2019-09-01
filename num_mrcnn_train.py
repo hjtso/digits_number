@@ -27,8 +27,8 @@ MODEL_DIR = os.path.join(ROOT_DIR, "model_train")
 COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
 # The path of training images
-# DATASET_ROOT_PATH = "/home/ubuntu/hjt/Mask_RCNN/train_images/"
-DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "train_images/")
+# DATASET_ROOT_PATH = "/home/ubuntu/hjt/Mask_RCNN/_train_images/"
+DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "_train_images/")
 
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
@@ -139,6 +139,23 @@ class NUMDataset(utils.Dataset):
         self.add_class("NUM", 9, "7")
         self.add_class("NUM", 10, "8")
         self.add_class("NUM", 11, "9")
+        self.add_class("NUM", 12, "-")
+        self.add_class("NUM", 13, "%")
+        self.add_class("NUM", 14, "才")
+        self.add_class("NUM", 15, "基礎代謝量")
+        self.add_class("NUM", 16, "筋肉量")
+        self.add_class("NUM", 17, "男性")
+        self.add_class("NUM", 18, "女性")
+        self.add_class("NUM", 19, "内蔵脂肪")
+        self.add_class("NUM", 20, "体内年齢")
+        self.add_class("NUM", 21, "体脂肪率")
+        self.add_class("NUM", 22, "体重")
+        self.add_class("NUM", 23, "身長")
+        self.add_class("NUM", 24, "BMI")
+        self.add_class("NUM", 25, "cm")
+        self.add_class("NUM", 26, "kcal/日")
+        self.add_class("NUM", 27, "kg")
+        self.add_class("NUM", 28, "レベル")
 
         # Add images
         # Generate random specifications of images (i.e. color and
@@ -203,6 +220,8 @@ class NUMDataset(utils.Dataset):
                 labels_form.append("9")
             elif labels[i].find("0") != -1:
                 labels_form.append("0")
+            elif labels[i].find(".") != -1:
+                labels_form.append(".")
             elif labels[i].find(".") != -1:
                 labels_form.append(".")
 
@@ -281,6 +300,9 @@ if __name__ == '__main__':
     train_end = time.time()
     print("***** The end time:", train_end)
     print("***** The training Time:.%s Seconds" % (train_end - train_start))
+    # os.system("sudo shutdown")
 
 
-# nohup python num_mrcnn_train.py >> logs_nohup/num_log_x.log 2>&1 &
+# nohup python num_mrcnn_train.py >> _logs/num_log_x.log 2>&1 &
+# tensorboard -logdir=/home/ubuntu/hjt/digits_number/model_train/
+# ssh -f -N -L 55555:localhost:6006 mars

@@ -129,7 +129,7 @@ if __name__ == '__main__':
     lcd_mask_rcnn = LCDMrcnn()
     num_mask_rcnn = NUMMrcnn()
     
-    list_of_files = sorted(glob.glob('./test_images/1.jpg'))
+    list_of_files = sorted(glob.glob('./_test_images/1.jpg'))
     for file in list_of_files:
         print("\nImage name:", file)
         ocr_img = Ocr(file, lcd_mask_rcnn, num_mask_rcnn)
