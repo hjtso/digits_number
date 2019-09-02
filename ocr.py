@@ -105,7 +105,7 @@ class Ocr:
         cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
                   self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
         now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-        cv2.imwrite("./test_result/cropped_{}.jpg".format(now), cropped)
+        cv2.imwrite("./_test_result/cropped_{}.jpg".format(now), cropped)
 
         # TODO: Perspective Transform of LCD
         # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
