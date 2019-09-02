@@ -4,6 +4,7 @@ import sys
 import skimage.io
 import skimage.transform
 import time
+import glob
 from mrcnn.config import Config
 import mrcnn.model as modellib
 from mrcnn import visualize
@@ -88,7 +89,9 @@ class NUMMrcnn:
 
         # For show: Visualize results
         # COCO Class names: Index of the class in the list is its ID.
-        class_names = ['BG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.']
+        class_names = ['BG', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                       '-', '%', '才', '基礎代謝量', '筋肉量', '男性', '女性', '内蔵脂肪', '体内年齢',
+                       '体脂肪率', '生年月日', '体重', '身長', 'BMI', 'cm', 'kcal/日', 'kg', 'レベル']
         visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
 
         # TODO: return the list of numbers
@@ -100,7 +103,18 @@ class NUMMrcnn:
 
 if __name__ == '__main__':
     # test
-    image = './_test_images/1.jpg'
+    test_directory = os.path.join(ROOT_DIR, '_test_images')
+    result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = NUMMrcnn()
-    scores = mask_rcnn.test_image(image)
-    print(scores[0])
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, '*.jpg')))
+
+    test_start = time.time()
+    print("***** The start time:", test_start)
+    for file in list_of_files:
+        print("\nImage name:", file)
+        scores = mask_rcnn.test_image(file)
+        print("Scores:", scores[0])
+    test_end = time.time()
+    print("***** The end time:", test_end)
+    print("***** The testing Time for every image:.%s Seconds" % ((test_end - test_start)/len(list_of_files)))
+

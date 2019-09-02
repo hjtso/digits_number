@@ -149,13 +149,14 @@ class NUMDataset(utils.Dataset):
         self.add_class("NUM", 19, "内蔵脂肪")
         self.add_class("NUM", 20, "体内年齢")
         self.add_class("NUM", 21, "体脂肪率")
-        self.add_class("NUM", 22, "体重")
-        self.add_class("NUM", 23, "身長")
-        self.add_class("NUM", 24, "BMI")
-        self.add_class("NUM", 25, "cm")
-        self.add_class("NUM", 26, "kcal/日")
-        self.add_class("NUM", 27, "kg")
-        self.add_class("NUM", 28, "レベル")
+        self.add_class("NUM", 22, "生年月日")
+        self.add_class("NUM", 23, "体重")
+        self.add_class("NUM", 24, "身長")
+        self.add_class("NUM", 25, "BMI")
+        self.add_class("NUM", 26, "cm")
+        self.add_class("NUM", 27, "kcal/日")
+        self.add_class("NUM", 28, "kg")
+        self.add_class("NUM", 29, "レベル")
 
         # Add images
         # Generate random specifications of images (i.e. color and
@@ -200,7 +201,11 @@ class NUMDataset(utils.Dataset):
 
         # ● add class label
         for i in range(len(labels)):
-            if labels[i].find("1") != -1:
+            if labels[i].find(".") != -1:
+                labels_form.append(".")
+            elif labels[i].find("0") != -1:
+                labels_form.append("0")
+            elif labels[i].find("1") != -1:
                 labels_form.append("1")
             elif labels[i].find("2") != -1:
                 labels_form.append("2")
@@ -218,12 +223,42 @@ class NUMDataset(utils.Dataset):
                 labels_form.append("8")
             elif labels[i].find("9") != -1:
                 labels_form.append("9")
-            elif labels[i].find("0") != -1:
-                labels_form.append("0")
-            elif labels[i].find(".") != -1:
-                labels_form.append(".")
-            elif labels[i].find(".") != -1:
-                labels_form.append(".")
+            elif labels[i].find("-") != -1:
+                labels_form.append("-")
+            elif labels[i].find("%") != -1:
+                labels_form.append("%")
+            elif labels[i].find("才") != -1:
+                labels_form.append("才")
+            elif labels[i].find("基礎代謝量") != -1:
+                labels_form.append("基礎代謝量")
+            elif labels[i].find("筋肉量") != -1:
+                labels_form.append("筋肉量")
+            elif labels[i].find("男性") != -1:
+                labels_form.append("男性")
+            elif labels[i].find("女性") != -1:
+                labels_form.append("女性")
+            elif labels[i].find("内蔵脂肪") != -1:
+                labels_form.append("内蔵脂肪")
+            elif labels[i].find("体内年齢") != -1:
+                labels_form.append("体内年齢")
+            elif labels[i].find("体脂肪率") != -1:
+                labels_form.append("体脂肪率")
+            elif labels[i].find("生年月日") != -1:
+                labels_form.append("生年月日")
+            elif labels[i].find("体重") != -1:
+                labels_form.append("体重")
+            elif labels[i].find("身長") != -1:
+                labels_form.append("身長")
+            elif labels[i].find("BMI") != -1:
+                labels_form.append("BMI")
+            elif labels[i].find("cm") != -1:
+                labels_form.append("cm")
+            elif labels[i].find("kcal/日") != -1:
+                labels_form.append("kcal/日")
+            elif labels[i].find("kg") != -1:
+                labels_form.append("kg")
+            elif labels[i].find("レベル") != -1:
+                labels_form.append("レベル")
 
         class_ids = np.array([self.class_names.index(s) for s in labels_form])
         return mask, class_ids.astype(np.int32)
@@ -294,13 +329,13 @@ if __name__ == '__main__':
     # You can also pass a regular expression to select which layers to train by name pattern.
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=100,
+                epochs=60,
                 layers='all')
 
     train_end = time.time()
     print("***** The end time:", train_end)
     print("***** The training Time:.%s Seconds" % (train_end - train_start))
-    # os.system("sudo shutdown")
+    os.system("sudo shutdown")
 
 
 # nohup python num_mrcnn_train.py >> _logs/num_log_x.log 2>&1 &
