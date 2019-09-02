@@ -35,7 +35,7 @@ class NUMConfig(Config):
     IMAGES_PER_GPU = 1
 
     # ● Number of classes (including background)
-    NUM_CLASSES = 1 + 10 + 1  # 10:0123456789  1:..
+    NUM_CLASSES = 1 + 29  # background + myClass NUM
 
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
