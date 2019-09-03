@@ -164,12 +164,11 @@ def display_instances(image, boxes, masks, class_ids, class_names,
             p = Polygon(verts, facecolor="none", edgecolor=color)
             ax.add_patch(p)
     ax.imshow(masked_image.astype(np.uint8))
-    if auto_show:
+    # if auto_show:
         # Add: save image
         # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-        # plt.savefig(os.path.join(os.path.abspath("./"), "test_result/{}.png".format(now)))
+        # plt.savefig(os.path.join(os.path.abspath("./"), "_test_result/{}.png".format(now)))
         # plt.show()
-        pass
 
 
 def display_differences(image,
