@@ -96,7 +96,11 @@ class NUMMrcnn:
 
         # TODO: return the list of numbers
         if r['class_ids'].size:
-            return r['class_ids']
+            # return str(r['class_ids'])
+            class_list = []
+            for x in r['class_ids']:
+                class_list.append(class_names[x])
+            return class_list
         else:
             return []
 
@@ -113,7 +117,7 @@ if __name__ == '__main__':
     for file in list_of_files:
         print("\nImage name:", file)
         scores = mask_rcnn.test_image(file)
-        print("Scores:", scores[0])
+        print("Scores:", scores)
     test_end = time.time()
     print("***** The end time:", test_end)
     print("***** The testing Time for every image:.%s Seconds" % ((test_end - test_start)/len(list_of_files)))
