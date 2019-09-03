@@ -49,8 +49,8 @@ class NUMConfig(Config):
 
     # Train on 1 GPU and 1 images per GPU. We can put multiple images on each
     # GPU because the images are small. Batch size is 1 (GPUs * images/GPU).
-    GPU_COUNT = 1
-    IMAGES_PER_GPU = 1
+    GPU_COUNT = 8
+    IMAGES_PER_GPU = 2
 
     # ● Number of classes (including background)
     NUM_CLASSES = 1 + 29  # background + myClass NUM
@@ -329,7 +329,7 @@ if __name__ == '__main__':
     # You can also pass a regular expression to select which layers to train by name pattern.
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=60,
+                epochs=160,
                 layers='all')
 
     train_end = time.time()
