@@ -79,9 +79,9 @@ class NUMMrcnn:
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        image = skimage.io.imread(img)
+        # image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.3)
-        # image = img
+        image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
@@ -103,16 +103,19 @@ class NUMMrcnn:
 
         # TODO: return the list of numbers
         if r['class_ids'].size:
-            class_list = []
+            class_list_1 = []
+            class_list_2 = []
             for x in tmp_sort:
                 class_name_result = class_names[r['class_ids'][x]]
-                if class_name_result.isdigit() or class_name_result is ".":
-                    class_list.append(class_name_result)
+                if class_name_result.isdigit() or class_name_result in [".", '-', '%', '才', 'cm', 'kcal/日', 'kg', 'レベル']:
+                    class_list_2.append(class_name_result)
+                else:
+                    class_list_1.append(class_name_result)
             # class_ids_list = [x for _, x in sorted(zip(tmp_sort, r['class_ids']))]
             # for x in class_ids_list:
             #     print("x, name", x, class_names[x])
             #     class_list.append(class_names[x])
-            return class_list
+            return class_list_1 + class_list_2
         else:
             return []
 
