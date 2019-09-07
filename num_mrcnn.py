@@ -5,6 +5,7 @@ import skimage.io
 import skimage.transform
 import time
 import glob
+import numpy as np
 from mrcnn.config import Config
 import mrcnn.model as modellib
 from mrcnn import visualize
@@ -78,14 +79,20 @@ class NUMMrcnn:
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        # image = skimage.io.imread(img)
+        image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.3)
-        image = img
+        # image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
-
         r = results[0]
+
+        centerdict = np.array([])
+        for value in results[0]['rois']:
+            (y1, x1, y2, x2) = value
+            (rectcenter_x, rectcenter_y) = ((x1 + x2) / 2, (y1 + y2) / 2)
+            centerdict = np.append(centerdict, [rectcenter_x])
+        tmp_sort = np.argsort(centerdict)
 
         # For show: Visualize results
         # COCO Class names: Index of the class in the list is its ID.
@@ -97,9 +104,14 @@ class NUMMrcnn:
         # TODO: return the list of numbers
         if r['class_ids'].size:
             class_list = []
-            for x in r['class_ids']:
-                class_list.append(class_names[x])
-            print("class_list:", class_list)
+            for x in tmp_sort:
+                class_name_result = class_names[r['class_ids'][x]]
+                if class_name_result.isdigit() or class_name_result is ".":
+                    class_list.append(class_name_result)
+            # class_ids_list = [x for _, x in sorted(zip(tmp_sort, r['class_ids']))]
+            # for x in class_ids_list:
+            #     print("x, name", x, class_names[x])
+            #     class_list.append(class_names[x])
             return class_list
         else:
             return []
@@ -110,7 +122,7 @@ if __name__ == '__main__':
     test_directory = os.path.join(ROOT_DIR, '_test_images')
     result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = NUMMrcnn()
-    list_of_files = sorted(glob.glob(os.path.join(test_directory, '*.jpg')))
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, '83.jpg')))
 
     test_start = time.time()
     print("***** The start time:", test_start)
