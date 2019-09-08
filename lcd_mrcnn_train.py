@@ -122,7 +122,7 @@ class LCDDataset(utils.Dataset):
                         mask[j, i, index] = 1
         return mask
 
-    def load_LCD(self,count, img_floder, imglist):
+    def load_LCD(self, count, imglist):
         """Generate the requested number of synthetic images.
         count: number of images to generate.
         height, width: the size of the generated images.
@@ -191,11 +191,11 @@ if __name__ == '__main__':
     count = len(imglist)
 
     dataset_train = LCDDataset()
-    dataset_train.load_LCD(count, DATASET_ROOT_PATH, imglist)
+    dataset_train.load_LCD(count, imglist)
     dataset_train.prepare()
 
     dataset_val = LCDDataset()
-    dataset_val.load_LCD(2, DATASET_ROOT_PATH, imglist)
+    dataset_val.load_LCD(2, imglist)
     dataset_val.prepare()
 
     # Create model in training mode

@@ -79,21 +79,13 @@ class NUMMrcnn:
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        image = skimage.io.imread(img)
-        image = skimage.transform.resize(image, 0.3)
+        # image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.3)
-        # image = img
+        image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
         r = results[0]
-
-        centerdict = np.array([])
-        for value in results[0]['rois']:
-            (y1, x1, y2, x2) = value
-            (rectcenter_x, rectcenter_y) = ((x1 + x2) / 2, (y1 + y2) / 2)
-            centerdict = np.append(centerdict, [rectcenter_x])
-        tmp_sort = np.argsort(centerdict)
 
         # For show: Visualize results
         # COCO Class names: Index of the class in the list is its ID.
@@ -104,6 +96,13 @@ class NUMMrcnn:
 
         # TODO: return the list of numbers
         if r['class_ids'].size:
+            centerdict = np.array([])
+            for value in results[0]['rois']:
+                (y1, x1, y2, x2) = value
+                (rectcenter_x, rectcenter_y) = ((x1 + x2) / 2, (y1 + y2) / 2)
+                centerdict = np.append(centerdict, [rectcenter_x])
+            tmp_sort = np.argsort(centerdict)
+            
             class_list_1 = []
             class_list_2 = []
             for x in tmp_sort:
@@ -112,10 +111,6 @@ class NUMMrcnn:
                     class_list_2.append(class_name_result)
                 else:
                     class_list_1.append(class_name_result)
-            # class_ids_list = [x for _, x in sorted(zip(tmp_sort, r['class_ids']))]
-            # for x in class_ids_list:
-            #     print("x, name", x, class_names[x])
-            #     class_list.append(class_names[x])
             return class_list_1 + class_list_2
         else:
             return []
