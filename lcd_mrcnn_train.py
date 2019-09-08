@@ -179,22 +179,9 @@ class LCDDataset(utils.Dataset):
         return mask, class_ids.astype(np.int32)
 
 
-def get_ax(rows=1, cols=1, size=8):
-    """Return a Matplotlib Axes array to be used in
-    all visualizations in the notebook. Provide a
-    central point to control graph sizes.
- 
-    Change the default size attribute to control the size
-    of rendered images
-    """
-    _, ax = plt.subplots(rows, cols, figsize=(size * cols, size * rows))
-    return ax
-
-
 ############################################################
 #  Training
 ############################################################
-
 if __name__ == '__main__':
     train_start = time.time()
     print("***** The start time:", train_start)

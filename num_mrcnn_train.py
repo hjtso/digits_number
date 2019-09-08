@@ -10,6 +10,7 @@ import cv2
 from PIL import Image
 import matplotlib
 import matplotlib.pyplot as plt
+
 # Root directory of the project
 ROOT_DIR = os.path.abspath("./")
 sys.path.append(ROOT_DIR)  # To find local version of the library
@@ -34,6 +35,7 @@ DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "_train_images/")
 if not os.path.exists(COCO_MODEL_PATH):
     utils.download_trained_weights(COCO_MODEL_PATH)
 
+
 ############################################################
 #  Configurations
 ############################################################
@@ -57,14 +59,14 @@ class NUMConfig(Config):
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 512
-    IMAGE_MAX_DIM = 512
+    IMAGE_MIN_DIM = 1024  # 512
+    IMAGE_MAX_DIM = 1024  # 512
     # scale_max = 1024 // IMAGE_MAX_DIM
     # scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
     # RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
-    RPN_ANCHOR_SCALES = (8*6, 16*6, 32*6, 64*6, 128*6)  # anchor side in pixels
+    RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
@@ -112,7 +114,7 @@ class NUMDataset(utils.Dataset):
             del labels[0]
         return labels
 
-    def draw_mask(self, num_obj, mask, image,image_id):
+    def draw_mask(self, num_obj, mask, image, image_id):
         info = self.image_info[image_id]
         for index in range(num_obj):
             for i in range(info['width']):
@@ -122,7 +124,7 @@ class NUMDataset(utils.Dataset):
                         mask[j, i, index] = 1
         return mask
 
-    def load_NUM(self,count, img_floder, imglist):
+    def load_NUM(self, count, img_floder, imglist):
         """Generate the requested number of synthetic images.
         count: number of images to generate.
         height, width: the size of the generated images.
@@ -178,7 +180,7 @@ class NUMDataset(utils.Dataset):
             # plt.subplot(1, 1, 1), plt.title('test'), plt.imshow(cv_img)
             self.add_image("NUM", image_id=i, path=DATASET_ROOT_PATH + filestr + "/img.png",
                            width=cv_img.shape[1], height=cv_img.shape[0], mask_path=mask_path, yaml_path=yaml_path)
-        
+
     def load_mask(self, image_id):
         """Generate instance masks for NUM of the given image ID.
         """
@@ -264,22 +266,9 @@ class NUMDataset(utils.Dataset):
         return mask, class_ids.astype(np.int32)
 
 
-def get_ax(rows=1, cols=1, size=8):
-    """Return a Matplotlib Axes array to be used in
-    all visualizations in the notebook. Provide a
-    central point to control graph sizes.
- 
-    Change the default size attribute to control the size
-    of rendered images
-    """
-    _, ax = plt.subplots(rows, cols, figsize=(size * cols, size * rows))
-    return ax
-
-
 ############################################################
 #  Training
 ############################################################
-
 if __name__ == '__main__':
     train_start = time.time()
     print("***** The start time:", train_start)
@@ -336,7 +325,6 @@ if __name__ == '__main__':
     print("***** The end time:", train_end)
     print("***** The training Time:.%s Seconds" % (train_end - train_start))
     os.system("sudo shutdown")
-
 
 # nohup python num_mrcnn_train.py >> _logs/num_log_x.log 2>&1 &
 # tensorboard -logdir=/home/ubuntu/hjt/digits_number/model_train/
