@@ -41,11 +41,14 @@ class NUMConfig(Config):
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 512  # 512
-    IMAGE_MAX_DIM = 512  # 512
+    IMAGE_MIN_DIM = 768  # 768  # 640  # 512
+    IMAGE_MAX_DIM = 768  # 768  # 640  # 512
+    scale_max = 1024 // IMAGE_MAX_DIM
+    scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
-    RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
+    RPN_ANCHOR_SCALES = (32 // scale_max, 64 // scale_max, 128 // scale_max, 256 // scale_max, 512 // scale_max)
+    # RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
 
 
 class NUMMrcnn:
@@ -79,9 +82,9 @@ class NUMMrcnn:
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        # image = skimage.io.imread(img)
+        image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.3)
-        image = img
+        # image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
@@ -102,7 +105,7 @@ class NUMMrcnn:
                 (rectcenter_x, rectcenter_y) = ((x1 + x2) / 2, (y1 + y2) / 2)
                 centerdict = np.append(centerdict, [rectcenter_x])
             tmp_sort = np.argsort(centerdict)
-            
+
             class_list_1 = []
             class_list_2 = []
             for x in tmp_sort:
@@ -121,7 +124,7 @@ if __name__ == '__main__':
     test_directory = os.path.join(ROOT_DIR, '_test_images')
     result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = NUMMrcnn()
-    list_of_files = sorted(glob.glob(os.path.join(test_directory, '81_cut.jpg')))
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, '81.jpg')))
 
     test_start = time.time()
     print("***** The start time:", test_start)
