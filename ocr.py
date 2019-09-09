@@ -10,6 +10,7 @@ import time
 from matplotlib import pyplot as plt
 from scipy import stats
 import skimage.io
+import skimage.transform
 from lcd_mrcnn import LCDMrcnn
 from num_mrcnn import NUMMrcnn
 
@@ -104,8 +105,11 @@ class Ocr:
         image_cut = cv2.imread(self.img)
         cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
                   self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
-        now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-        cv2.imwrite("./_test_result/cropped_{}.jpg".format(now), cropped)
+        # cropped = skimage.transform.rescale(cropped, 0.25)
+        # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
+        (filepath, tempfilename) = os.path.split(self.img)
+        (filename, extension) = os.path.splitext(tempfilename)
+        cv2.imwrite("./_test_result/{}.jpg".format(filename), cropped)
 
         # TODO: Perspective Transform of LCD
         # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
