@@ -59,29 +59,29 @@ class NUMConfig(Config):
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 768  # 512
-    IMAGE_MAX_DIM = 768  # 512
-    scale_max = 1024 // IMAGE_MAX_DIM
-    scale_min = 1024 // IMAGE_MIN_DIM
+    IMAGE_MIN_DIM = 1024  # 768  # 512
+    IMAGE_MAX_DIM = 1024  # 768  # 512
+    # scale_max = 1024 // IMAGE_MAX_DIM
+    # scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
-    RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
-    # RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
+    # RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
+    RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
-    TRAIN_ROIS_PER_IMAGE = 200 // scale_min
-    # TRAIN_ROIS_PER_IMAGE = 32
+    # TRAIN_ROIS_PER_IMAGE = 200 // scale_min
+    TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    num_images = 80
-    batch_size = GPU_COUNT * IMAGES_PER_GPU
-    STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
-    # STEPS_PER_EPOCH = 60  # 50
+    # num_images = 80
+    # batch_size = GPU_COUNT * IMAGES_PER_GPU
+    # STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
+    STEPS_PER_EPOCH = 60  # 50
 
     # use small validation steps since the epoch is small
-    VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
-    # VALIDATION_STEPS = 10
+    # VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
+    VALIDATION_STEPS = 10
 
     # RPN_TRAIN_ANCHORS_PER_IMAGE = 256 // scale_max
     #
@@ -153,8 +153,8 @@ class NUMDataset(utils.Dataset):
         self.add_class("NUM", 21, "体脂肪率")
         self.add_class("NUM", 22, "生年月日")
         self.add_class("NUM", 23, "体重")
-        self.add_class("NUM", 24, "身長")
-        self.add_class("NUM", 25, "BMI")
+        self.add_class("NUM", 24, "BMI")
+        self.add_class("NUM", 25, "年")
         self.add_class("NUM", 26, "cm")
         self.add_class("NUM", 27, "kcal/日")
         self.add_class("NUM", 28, "kg")
@@ -249,10 +249,10 @@ class NUMDataset(utils.Dataset):
                 labels_form.append("生年月日")
             elif labels[i].find("体重") != -1:
                 labels_form.append("体重")
-            elif labels[i].find("身長") != -1:
-                labels_form.append("身長")
             elif labels[i].find("BMI") != -1:
                 labels_form.append("BMI")
+            elif labels[i].find("年") != -1:
+                labels_form.append("年")
             elif labels[i].find("cm") != -1:
                 labels_form.append("cm")
             elif labels[i].find("kcal/日") != -1:

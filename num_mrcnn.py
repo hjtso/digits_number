@@ -41,14 +41,14 @@ class NUMConfig(Config):
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 768  # 768  # 640  # 512
-    IMAGE_MAX_DIM = 768  # 768  # 640  # 512
-    scale_max = 1024 // IMAGE_MAX_DIM
-    scale_min = 1024 // IMAGE_MIN_DIM
+    IMAGE_MIN_DIM = 1024  # 768  # 640  # 512
+    IMAGE_MAX_DIM = 1024  # 768  # 640  # 512
+    # scale_max = 1024 // IMAGE_MAX_DIM
+    # scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
-    RPN_ANCHOR_SCALES = (32 // scale_max, 64 // scale_max, 128 // scale_max, 256 // scale_max, 512 // scale_max)
-    # RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
+    # RPN_ANCHOR_SCALES = (32 // scale_max, 64 // scale_max, 128 // scale_max, 256 // scale_max, 512 // scale_max)
+    RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
 
 
 class NUMMrcnn:
@@ -77,14 +77,15 @@ class NUMMrcnn:
     def test_image(self, img):
         """Use Mask-RCNN to detect NUM in the image.
         Use model.detect functio.
-        Args:
+        Args:= skimage.
             img: The image of Receipt.
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        image = skimage.io.imread(img)
-        # image = skimage.transform.rescale(image, 0.3)
-        # image = img
+        # image = skimage.io.imread(img)
+        # image = skimage.transform.rescale(image, 0.5, 3)
+        # image = skimage.transform.resize(image, (1024, 1024, 3))
+        image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
@@ -94,7 +95,7 @@ class NUMMrcnn:
         # COCO Class names: Index of the class in the list is its ID.
         class_names = ['BG', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                        '-', '%', '才', '基礎代謝量', '筋肉量', '男性', '女性', '内蔵脂肪', '体内年齢',
-                       '体脂肪率', '生年月日', '体重', '身長', 'BMI', 'cm', 'kcal/日', 'kg', 'レベル']
+                       '体脂肪率', '生年月日', '体重', 'BMI', '年', 'cm', 'kcal/日', 'kg', 'レベル']
         visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
 
         # TODO: return the list of numbers
@@ -110,7 +111,7 @@ class NUMMrcnn:
             class_list_2 = []
             for x in tmp_sort:
                 class_name_result = class_names[r['class_ids'][x]]
-                if class_name_result.isdigit() or class_name_result in [".", '-', '%', '才', 'cm', 'kcal/日', 'kg', 'レベル']:
+                if class_name_result.isdigit() or class_name_result in [".", '-', '%', '才', '年', 'cm', 'kcal/日', 'kg', 'レベル']:
                     class_list_2.append(class_name_result)
                 else:
                     class_list_1.append(class_name_result)
@@ -124,7 +125,7 @@ if __name__ == '__main__':
     test_directory = os.path.join(ROOT_DIR, '_test_images')
     result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = NUMMrcnn()
-    list_of_files = sorted(glob.glob(os.path.join(test_directory, '81.jpg')))
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, '*.jpg')))
 
     test_start = time.time()
     print("***** The start time:", test_start)
@@ -135,4 +136,3 @@ if __name__ == '__main__':
     test_end = time.time()
     print("***** The end time:", test_end)
     print("***** The testing Time for every image:.%s Seconds" % ((test_end - test_start)/len(list_of_files)))
-

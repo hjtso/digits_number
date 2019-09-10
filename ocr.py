@@ -109,7 +109,7 @@ class Ocr:
         # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
         (filepath, tempfilename) = os.path.split(self.img)
         (filename, extension) = os.path.splitext(tempfilename)
-        cv2.imwrite("./_test_result/{}.jpg".format(filename), cropped)
+        cv2.imwrite("./_test_result/cut_{}.jpg".format(filename), cropped)
 
         # TODO: Perspective Transform of LCD
         # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
