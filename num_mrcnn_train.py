@@ -24,8 +24,8 @@ MODEL_DIR = os.path.join(ROOT_DIR, "model_train")
 COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
 # The path of training images
-# DATASET_ROOT_PATH = "/home/ubuntu/hjt/Mask_RCNN/_train_images/"
-DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "_train_images/")
+# DATASET_ROOT_PATH = "/home/ubuntu/hjt/Mask_RCNN/_train_images_num/"
+DATASET_ROOT_PATH = os.path.join(ROOT_DIR, "_train_images_num/")
 
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
