@@ -8,8 +8,8 @@ from num_mrcnn import NUMMrcnn
 from werkzeug.utils import secure_filename
 from flask import Flask, request
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = ['png', 'jpg']
-UPLOAD_PATH = "pics"
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
+UPLOAD_PATH = "_pics"
 CODE_FILE_NOTALLOWED = 402
 
 
@@ -17,7 +17,7 @@ def allowed_filename(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@app.route('/pics', methods=['POST'])
+@app.route('/_pics', methods=['POST'])
 def ocr():
     submitted_file = request.files['file']
     file_name = submitted_file.filename

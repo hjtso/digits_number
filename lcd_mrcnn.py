@@ -40,8 +40,10 @@ class LCDConfig(Config):
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 512
-    IMAGE_MAX_DIM = 512
+    # Image size must be dividable by 2 at least 6 times to avoid fractions
+    # when downscaling and upscaling.For example, use 256, 320, 384, 448, 512, ... etc.
+    IMAGE_MIN_DIM = 384
+    IMAGE_MAX_DIM = 384
 
     # Use smaller anchors because our image and objects are small
     RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
@@ -83,13 +85,12 @@ class LCDMrcnn:
 
         # Run detection
         results = self.model.detect([image], verbose=1)
-
         r = results[0]
 
         # For show: Visualize results
         # COCO Class names: Index of the class in the list is its ID.
-        class_names = ['BG', 'LCD']
-        visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
+        # class_names = ['BG', 'LCD']
+        # visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
 
         if r['scores'].size:
             return r['scores'], r['rois']

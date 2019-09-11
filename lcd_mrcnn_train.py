@@ -1,6 +1,5 @@
 import os
 import sys
-import random
 import yaml
 import math
 import re
@@ -10,7 +9,6 @@ import cv2
 from PIL import Image
 import matplotlib
 import matplotlib.pyplot as plt
-# Root directory of the project
 ROOT_DIR = os.path.abspath("./")
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn.config import Config
@@ -18,7 +16,6 @@ from mrcnn import utils
 import mrcnn.model as modellib
 from mrcnn import visualize
 from mrcnn.model import log
-import tensorflow as tf
 
 # Directory to save logs and trained model
 MODEL_DIR = os.path.join(ROOT_DIR, "model_train")
@@ -49,7 +46,7 @@ class LCDConfig(Config):
 
     # Train on 1 GPU and 1 images per GPU. We can put multiple images on each
     # GPU because the images are small. Batch size is 1 (GPUs * images/GPU).
-    GPU_COUNT = 1
+    GPU_COUNT = 8
     IMAGES_PER_GPU = 1
 
     # ● Number of classes (including background)
@@ -57,10 +54,12 @@ class LCDConfig(Config):
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 512
-    IMAGE_MAX_DIM = 512
-    # scale_max = 1024 // IMAGE_MAX_DIM
-    # scale_min = 1024 // IMAGE_MIN_DIM
+    # Image size must be dividable by 2 at least 6 times to avoid fractions
+    # when downscaling and upscaling.For example, use 256, 320, 384, 448, 512, ... etc.
+    IMAGE_MIN_DIM = 384
+    IMAGE_MAX_DIM = 384
+    scale_max = 1024 // IMAGE_MAX_DIM
+    scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
     # RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
@@ -68,18 +67,18 @@ class LCDConfig(Config):
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
-    # TRAIN_ROIS_PER_IMAGE = 200 // scale_min
-    TRAIN_ROIS_PER_IMAGE = 32
+    TRAIN_ROIS_PER_IMAGE = 200 // scale_min
+    # TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    # num_images = 100
-    # batch_size = GPU_COUNT * IMAGES_PER_GPU
-    # STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
-    STEPS_PER_EPOCH = 60  # 50
+    num_images = 80
+    batch_size = GPU_COUNT * IMAGES_PER_GPU
+    STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
+    # STEPS_PER_EPOCH = 60
 
     # use small validation steps since the epoch is small
-    # VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
-    VALIDATION_STEPS = 10
+    VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
+    # VALIDATION_STEPS = 10
 
     # RPN_TRAIN_ANCHORS_PER_IMAGE = 256 // scale_max
     #
@@ -153,11 +152,9 @@ class LCDDataset(utils.Dataset):
     def load_mask(self, image_id):
         """Generate instance masks for LCD of the given image ID.
         """
-        global iter_num
         print("image_id", image_id)
         info = self.image_info[image_id]
-        # ● number of object
-        count = 1
+        count = 1  # number of object
         img = Image.open(info['mask_path'])
         num_obj = self.get_obj_index(img)
         mask = np.zeros([info['height'], info['width'], num_obj], dtype=np.uint8)

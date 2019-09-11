@@ -41,8 +41,10 @@ class NUMConfig(Config):
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 1024  # 768  # 640  # 512
-    IMAGE_MAX_DIM = 1024  # 768  # 640  # 512
+    # Image size must be dividable by 2 at least 6 times to avoid fractions
+    # when downscaling and upscaling.For example, use 256, 320, 384, 448, 512, ... etc.
+    IMAGE_MIN_DIM = 512  # 768  # 640  # 512
+    IMAGE_MAX_DIM = 512  # 768  # 640  # 512
     # scale_max = 1024 // IMAGE_MAX_DIM
     # scale_min = 1024 // IMAGE_MIN_DIM
 
@@ -82,10 +84,10 @@ class NUMMrcnn:
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        # image = skimage.io.imread(img)
+        image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.5, 3)
         # image = skimage.transform.resize(image, (1024, 1024, 3))
-        image = img
+        # image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
@@ -96,7 +98,7 @@ class NUMMrcnn:
         class_names = ['BG', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                        '-', '%', '才', '基礎代謝量', '筋肉量', '男性', '女性', '内蔵脂肪', '体内年齢',
                        '体脂肪率', '生年月日', '体重', 'BMI', '年', 'cm', 'kcal/日', 'kg', 'レベル']
-        visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
+        # visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
 
         # TODO: return the list of numbers
         if r['class_ids'].size:
@@ -125,7 +127,7 @@ if __name__ == '__main__':
     test_directory = os.path.join(ROOT_DIR, '_test_images')
     result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = NUMMrcnn()
-    list_of_files = sorted(glob.glob(os.path.join(test_directory, '*.jpg')))
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, 'cut_2.jpg')))
 
     test_start = time.time()
     print("***** The start time:", test_start)
