@@ -1,8 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-import numpy as np
 import cv2
-import imutils
 import os
 import json
 import glob
@@ -14,7 +12,6 @@ import skimage.transform
 from lcd_mrcnn import LCDMrcnn
 from num_mrcnn import NUMMrcnn
 
-HEIGHT = 500
 SCORE = 0.666
 CODE_FILE_SUCCESS = 200
 CODE_FILE_NOTFOUND = 401
@@ -84,8 +81,10 @@ class Ocr:
                                'LCD_coordinate': None,
                                'result': {'LCD': None,
                                           'NUM': None}})
-
+                                          
+        ############################################################
         # 1.LCD有無判定
+        ############################################################
         a = time.time()
         self.ocr_lcd_determine()
         b = time.time()
@@ -100,24 +99,24 @@ class Ocr:
                           'result': {'LCD': self.LCD_tag,
                                      'NUM': self.numbers}}
             return json.dumps(result_all)
-
+            
+        ############################################################
         # 2.数字を取得する
+        ############################################################
         # image_cut = cv2.imread(self.img)
         image_cut = skimage.io.imread(self.img)
         cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
                   self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
-        # cropped = skimage.transform.rescale(cropped, 0.25)
-        # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
         (filepath, tempfilename) = os.path.split(self.img)
         (filename, extension) = os.path.splitext(tempfilename)
         # cv2.imwrite("./_test_result/cut_{}.jpg".format(filename), cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
-        skimage.io.imsave("./_test_result/cut_{}.jpg".format(filename))
+        skimage.io.imsave("./_test_result/cut_{}.jpg".format(filename), cropped)
         
-
         # TODO: Perspective Transform of LCD
         # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+        # The images which are not transformed is better. Thus this part is cancelled.
 
-        # TODO: get the number from LCD
+        # get the number from LCD
         a = time.time()
         self.numbers = self.ocr_num_determine(cropped)
         b = time.time()
