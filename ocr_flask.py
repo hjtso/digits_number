@@ -45,7 +45,7 @@ def ocr():
         result = json.dumps({'code': CODE_FILE_NOTALLOWED,
                              'message': "Upload is failed. The file is not 'jpg' or 'png'.",
                              'result': {'LCD': None,
-                                        'NUM': None}})
+                                        'NUM': None}}, ensure_ascii=False)
         return result
 
 
@@ -56,5 +56,5 @@ if __name__ == '__main__':
 
 
 # command eg.
-# curl http://0.0.0.0:10080/pics -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
-# curl http://3.113.141.74:10080/pics -X POST -F file=@/Users/huangjintao/Desktop/digits_number/test_images/1.jpg -s | python -m json.tool
+# curl http://0.0.0.0:10080/_pics -X POST -F file=@/Users/huangjintao/Desktop/digits_number/_test_images/1.jpg -s | python -m json.tool
+# curl http://3.113.141.74:10080/_pics -X POST -F file=@/Users/huangjintao/Desktop/digits_number/_test_images/81.jpg -s | python -m json.tool
