@@ -58,8 +58,8 @@ class LCDConfig(Config):
     # when downscaling and upscaling.For example, use 256, 320, 384, 448, 512, ... etc.
     IMAGE_MIN_DIM = 384
     IMAGE_MAX_DIM = 384
-    scale_max = 1024 // IMAGE_MAX_DIM
-    scale_min = 1024 // IMAGE_MIN_DIM
+    # scale_max = 1024 // IMAGE_MAX_DIM
+    # scale_min = 1024 // IMAGE_MIN_DIM
 
     # Use smaller anchors because our image and objects are small
     # RPN_ANCHOR_SCALES = (32//scale_max, 64//scale_max, 128//scale_max, 256//scale_max, 512//scale_max)
@@ -67,18 +67,18 @@ class LCDConfig(Config):
 
     # Reduce training ROIs per image because the images are small and have
     # few objects. Aim to allow ROI sampling to pick 33% positive ROIs.
-    TRAIN_ROIS_PER_IMAGE = 200 // scale_min
-    # TRAIN_ROIS_PER_IMAGE = 32
+    # TRAIN_ROIS_PER_IMAGE = 200 // scale_min
+    TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    num_images = 80
-    batch_size = GPU_COUNT * IMAGES_PER_GPU
-    STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
-    # STEPS_PER_EPOCH = 60
+    # num_images = 80
+    # batch_size = GPU_COUNT * IMAGES_PER_GPU
+    # STEPS_PER_EPOCH = int(num_images / batch_size * (3 / 4))
+    STEPS_PER_EPOCH = 60
 
     # use small validation steps since the epoch is small
-    VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
-    # VALIDATION_STEPS = 10
+    # VALIDATION_STEPS = STEPS_PER_EPOCH // (1000 // 50)
+    VALIDATION_STEPS = 10
 
     # RPN_TRAIN_ANCHORS_PER_IMAGE = 256 // scale_max
     #
