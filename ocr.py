@@ -80,7 +80,7 @@ class Ocr:
                                'message': "The file can not be found in server",
                                'LCD_coordinate': None,
                                'result': {'LCD': None,
-                                          'NUM': None}})
+                                          'NUM': None}}, ensure_ascii=False)
                                           
         ############################################################
         # 1.LCD有無判定
@@ -98,7 +98,7 @@ class Ocr:
                           'message': "Upload is successful.",
                           'result': {'LCD': self.LCD_tag,
                                      'NUM': self.numbers}}
-            return json.dumps(result_all)
+            return json.dumps(result_all, ensure_ascii=False)
             
         ############################################################
         # 2.数字を取得する
