@@ -8,6 +8,7 @@ from num_mrcnn import NUMMrcnn
 from werkzeug.utils import secure_filename
 from flask import Flask, request
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 UPLOAD_PATH = "_pics"
 CODE_FILE_NOTALLOWED = 402
