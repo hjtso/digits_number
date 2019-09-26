@@ -51,7 +51,7 @@ class NUMConfig(Config):
     IMAGES_PER_GPU = 1
 
     # ● Number of classes (including background)
-    NUM_CLASSES = 1 + 29  # background + myClass NUM
+    NUM_CLASSES = 1 + 32  # background + myClass NUM
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
@@ -157,6 +157,9 @@ class NUMDataset(utils.Dataset):
         self.add_class("NUM", 27, "kcal/日")
         self.add_class("NUM", 28, "kg")
         self.add_class("NUM", 29, "レベル")
+        self.add_class("NUM", 30, "体年齢")
+        self.add_class("NUM", 31, "皮下脂肪率")
+        self.add_class("NUM", 32, "骨格筋率")
 
         # Add images
         # Generate random specifications of images (i.e. color and
@@ -256,6 +259,12 @@ class NUMDataset(utils.Dataset):
                 labels_form.append("kg")
             elif labels[i].find("レベル") != -1:
                 labels_form.append("レベル")
+            elif labels[i].find("体年齢") != -1:
+                labels_form.append("体年齢")
+            elif labels[i].find("皮下脂肪率") != -1:
+                labels_form.append("皮下脂肪率")
+            elif labels[i].find("骨格筋率") != -1:
+                labels_form.append("骨格筋率")
 
         class_ids = np.array([self.class_names.index(s) for s in labels_form])
         return mask, class_ids.astype(np.int32)

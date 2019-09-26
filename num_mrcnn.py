@@ -36,7 +36,7 @@ class NUMConfig(Config):
     IMAGES_PER_GPU = 1
 
     # ● Number of classes (including background)
-    NUM_CLASSES = 1 + 29  # background + myClass NUM
+    NUM_CLASSES = 1 + 32  # background + myClass NUM
 
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
@@ -97,7 +97,8 @@ class NUMMrcnn:
         # COCO Class names: Index of the class in the list is its ID.
         class_names = ['BG', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                        '-', '%', '才', '基礎代謝量', '筋肉量', '男性', '女性', '内蔵脂肪', '体内年齢',
-                       '体脂肪率', '生年月日', '体重', 'BMI', '年', 'cm', 'kcal/日', 'kg', 'レベル']
+                       '体脂肪率', '生年月日', '体重', 'BMI', '年', 'cm', 'kcal/日', 'kg', 'レベル',
+                       '体年齢', '皮下脂肪率', '骨格筋率']
         # visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
 
         # TODO: return the list of numbers
