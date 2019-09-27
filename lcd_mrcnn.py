@@ -42,8 +42,8 @@ class LCDConfig(Config):
     # the large side, and that determines the image shape.
     # Image size must be dividable by 2 at least 6 times to avoid fractions
     # when downscaling and upscaling.For example, use 256, 320, 384, 448, 512, ... etc.
-    IMAGE_MIN_DIM = 384
-    IMAGE_MAX_DIM = 384
+    IMAGE_MIN_DIM = 128
+    IMAGE_MAX_DIM = 128
 
     # Use smaller anchors because our image and objects are small
     RPN_ANCHOR_SCALES = (8 * 6, 16 * 6, 32 * 6, 64 * 6, 128 * 6)  # anchor side in pixels
