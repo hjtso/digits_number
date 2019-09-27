@@ -56,8 +56,8 @@ class LCDConfig(Config):
     # the large side, and that determines the image shape.
     # Image size must be dividable by 2 at least 6 times to avoid fractions
     # when downscaling and upscaling.For example, use 256, 320, 384, 448, 512, ... etc.
-    IMAGE_MIN_DIM = 384
-    IMAGE_MAX_DIM = 384
+    IMAGE_MIN_DIM = 128
+    IMAGE_MAX_DIM = 128
     # scale_max = 1024 // IMAGE_MAX_DIM
     # scale_min = 1024 // IMAGE_MIN_DIM
 
