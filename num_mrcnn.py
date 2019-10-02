@@ -84,10 +84,10 @@ class NUMMrcnn:
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
-        image = skimage.io.imread(img)
+        # image = skimage.io.imread(img)
         # image = skimage.transform.rescale(image, 0.5, 3)
         # image = skimage.transform.resize(image, (1024, 1024, 3))
-        # image = img
+        image = img
 
         # Run detection
         results = self.model.detect([image], verbose=1)
