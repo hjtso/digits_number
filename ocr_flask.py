@@ -41,13 +41,15 @@ def ocr():
         # delete image
         os.remove(file_path)
 
-        return result
+        return json.dumps(result, ensure_ascii=False)
     else:
-        result = json.dumps({'code': CODE_FILE_NOTALLOWED,
-                             'message': "Upload is failed. The file is not 'jpg' or 'png'.",
-                             'result': {'LCD': None,
-                                        'NUM': None}}, ensure_ascii=False)
-        return result
+        # result = json.dumps({'code': CODE_FILE_NOTALLOWED,
+        #                      'message': "Upload is failed. The file is not 'jpg' or 'png'.",
+        #                      'result': {'LCD': None,
+        #                                 'NUM': None}}, ensure_ascii=False)
+        result = {'NUM': None}
+
+        return json.dumps(result, ensure_ascii=False)
 
 
 if __name__ == '__main__':

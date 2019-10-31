@@ -155,6 +155,7 @@ class LCDDataset(utils.Dataset):
         print("image_id", image_id)
         info = self.image_info[image_id]
         count = 1  # number of object
+        # count = len(info["source"])
         img = Image.open(info['mask_path'])
         num_obj = self.get_obj_index(img)
         mask = np.zeros([info['height'], info['width'], num_obj], dtype=np.uint8)
@@ -162,7 +163,6 @@ class LCDDataset(utils.Dataset):
         occlusion = np.logical_not(mask[:, :, -1]).astype(np.uint8)
         for i in range(count - 2, -1, -1):
             mask[:, :, i] = mask[:, :, i] * occlusion
-
             occlusion = np.logical_and(occlusion, np.logical_not(mask[:, :, i]))
         labels = self.from_yaml_get_class(image_id)
         labels_form = []

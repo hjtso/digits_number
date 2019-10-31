@@ -81,7 +81,7 @@ def apply_mask(image, mask, color, alpha=0.5):
     return image
 
 
-def display_instances(image, boxes, masks, class_ids, class_names,
+def display_instances(image, filename, boxes, masks, class_ids, class_names,
                       scores=None, title="",
                       figsize=(16, 16), ax=None,
                       show_mask=True, show_bbox=True,
@@ -166,9 +166,8 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     ax.imshow(masked_image.astype(np.uint8))
     if auto_show:
         # Add: save image
-        now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-        plt.savefig(os.path.join(os.path.abspath("./"), "_test_result/{}.png".format(now)))
-        # plt.show()
+        # now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
+        plt.savefig(os.path.join(os.path.abspath("./"), "_test_result/{}.png".format(filename)))
 
 
 def display_differences(image,

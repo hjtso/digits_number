@@ -6,6 +6,7 @@ import skimage.transform
 import time
 import glob
 import numpy as np
+from natsort import natsorted
 from mrcnn.config import Config
 import mrcnn.model as modellib
 from mrcnn import visualize
@@ -36,7 +37,7 @@ class NUMConfig(Config):
     IMAGES_PER_GPU = 1
 
     # ● Number of classes (including background)
-    NUM_CLASSES = 1 + 32  # background + myClass NUM
+    NUM_CLASSES = 1 + 35  # background + myClass NUM
 
     # ● the same with training
     # Use small images for faster training. Set the limits of the small side
@@ -76,11 +77,12 @@ class NUMMrcnn:
         # https://github.com/matterport/Mask_RCNN/issues/600
         self.model.keras_model._make_predict_function()
 
-    def test_image(self, img):
+    def test_image(self, img, filename):
         """Use Mask-RCNN to detect NUM in the image.
         Use model.detect functio.
         Args:= skimage.
             img: The image of Receipt.
+            filename: The image name.
         Returns:
             list: The scores of each NUM. Set to [0] if NUM is not found.
         """
@@ -98,8 +100,8 @@ class NUMMrcnn:
         class_names = ['BG', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                        '-', '%', '才', '基礎代謝量', '筋肉量', '男性', '女性', '内蔵脂肪', '体内年齢',
                        '体脂肪率', '生年月日', '体重', 'BMI', '年', 'cm', 'kcal/日', 'kg', 'レベル',
-                       '体年齢', '皮下脂肪率', '骨格筋率']
-        # visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
+                       '体年齢', '皮下脂肪率', '骨格筋率', "基礎代謝", "kcal", "内蔵脂肪レベル"]
+        # visualize.display_instances(image, filename, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
 
         # TODO: return the list of numbers
         if r['class_ids'].size:
@@ -112,13 +114,16 @@ class NUMMrcnn:
 
             class_list_1 = []
             class_list_2 = []
+            class_list_3 = []
             for x in tmp_sort:
                 class_name_result = class_names[r['class_ids'][x]]
-                if class_name_result.isdigit() or class_name_result in [".", '-', '%', '才', '年', 'cm', 'kcal/日', 'kg', 'レベル']:
+                if class_name_result.isdigit() or class_name_result in [".", '-']:
                     class_list_2.append(class_name_result)
+                elif class_name_result in ['%', '才', '年', 'cm', 'kcal/日', 'kg', 'レベル', "kcal"]:
+                    class_list_3.append(class_name_result)
                 else:
                     class_list_1.append(class_name_result)
-            return class_list_1 + class_list_2
+            return class_list_1 + class_list_2 + class_list_3
         else:
             return []
 
@@ -128,13 +133,14 @@ if __name__ == '__main__':
     test_directory = os.path.join(ROOT_DIR, '_test_images')
     result_directory = os.path.join(ROOT_DIR, '_test_result')
     mask_rcnn = NUMMrcnn()
-    list_of_files = sorted(glob.glob(os.path.join(test_directory, 'cut_2.jpg')))
+    list_of_files = sorted(glob.glob(os.path.join(test_directory, '*.jpg')))
 
     test_start = time.time()
     print("***** The start time:", test_start)
-    for file in list_of_files:
+    # for file in list_of_files:
+    for file in natsorted(list_of_files):
         print("\nImage name:", file)
-        label_list = mask_rcnn.test_image(file)
+        label_list = mask_rcnn.test_image(file, file)
         print("Label_list:", label_list)
     test_end = time.time()
     print("***** The end time:", test_end)

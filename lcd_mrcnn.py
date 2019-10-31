@@ -5,6 +5,7 @@ import skimage.io
 import skimage.transform
 import time
 import glob
+from natsort import natsorted
 from mrcnn.config import Config
 import mrcnn.model as modellib
 from mrcnn import visualize
@@ -107,7 +108,8 @@ if __name__ == '__main__':
 
     test_start = time.time()
     print("***** The start time:", test_start)
-    for file in list_of_files:
+    # for file in list_of_files:
+    for file in natsorted(list_of_files):
         print("\nImage name:", file)
         scores = mask_rcnn.test_image(file)
         print("Scores:", scores[0])
