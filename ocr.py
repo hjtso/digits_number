@@ -116,8 +116,8 @@ class Ocr:
         image_cut = skimage.io.imread(self.img)
         cropped = image_cut[self.LCD_rectangle['top_left']['y']: self.LCD_rectangle['bottom_right']['y'],
                   self.LCD_rectangle['top_left']['x']: self.LCD_rectangle['bottom_right']['x']]  # [y0:y1, x0:x1]
-        # cv2.imwrite("./_test_result/cut_{}.jpg".format(self.img), cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
-        # skimage.io.imsave("./_test_result/cut_{}.jpg".format(self.img), cropped)
+        # cv2.imwrite("./_test_result/cut_{}.jpg".format(self.filename), cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
+        # skimage.io.imsave("./_test_result/cut_{}.jpg".format(self.filename), cropped)
 
         # TODO: Perspective Transform of LCD
         # reference: https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
